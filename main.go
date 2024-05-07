@@ -206,7 +206,7 @@ func UploadData(connectionString string, finalStats models.FinalStats) error {
 		return err
 	}
 
-	fmt.Println("Inserted document ID:", insertResult.InsertedID)
+	log.Println("Inserted", insertResult.InsertedID)
 
 	return err
 }
