@@ -19,7 +19,7 @@ type Account struct {
 }
 
 type Stats struct {
-	KeyboardMouse ModeStats `json:"keyboardMouse"`
+	All ModeStats `json:"all"`
 }
 
 type ModeStats struct {

@@ -1,5 +1,4 @@
-#Ignore all .env files
+#Ignore all sec based files
 *.env
-
-#Ignore player names
 playerList.txt
+fortniteStats.log
