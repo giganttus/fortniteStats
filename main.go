@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -39,7 +40,7 @@ func main() {
 	}
 
 	// Open the file for reading
-	file, err := os.Open("playerNames.txt")
+	file, err := os.Open("playerList.txt")
 	if err != nil {
 		log.Fatal("Error opening file:", err)
 	}
@@ -67,12 +68,18 @@ func main() {
 func FortniteApi(method string, playerName string, token string) (models.Response, error) {
 	var responseData models.Response
 
-	// Create a new HTTP client
+	// Create a new HTTP client, param values
 	client := &http.Client{}
+	params := url.Values{}
+	params.Add("name", playerName)
+	params.Add("timeWindow", "season")
 
-	url := fmt.Sprintf("https://fortnite-api.com/v2/stats/br/v2?name=%s&timeWindow=season", playerName)
+	// Base and req url
+	url := "https://fortnite-api.com/v2/stats/br/v2"
+	reqUrl := url + "?" + params.Encode()
+
 	// Create a new GET request
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequest(method, reqUrl, nil)
 	if err != nil {
 		return responseData, err
 	}
@@ -85,8 +92,12 @@ func FortniteApi(method string, playerName string, token string) (models.Respons
 	if err != nil {
 		return responseData, err
 	}
-
 	defer resp.Body.Close()
+
+	// Status code handling
+	if resp.StatusCode != 200 {
+		return responseData, fmt.Errorf("%v", resp.Status)
+	}
 
 	// Read the response body
 	body, err := io.ReadAll(resp.Body)
@@ -98,10 +109,6 @@ func FortniteApi(method string, playerName string, token string) (models.Respons
 	err = json.Unmarshal(body, &responseData)
 	if err != nil {
 		return responseData, err
-	}
-
-	if responseData.Status != 200 {
-		return responseData, fmt.Errorf("%v", responseData.Error)
 	}
 
 	return responseData, nil
