@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"context"
 	"encoding/json"
 	"fmt"
 	"fortniteStats/models"
@@ -11,10 +10,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -33,6 +33,23 @@ func main() {
 		log.Fatalf("Error loading .env file")
 	}
 
+	// MySQL connection string
+	dsn := fmt.Sprintf("root:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		os.Getenv("PASSWORD"), os.Getenv("HOSTNAME"), os.Getenv("PORT"), os.Getenv("DATABASE"))
+
+	// Connect to MySQL database
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("error mysql connection")
+	}
+
+	// Close connection
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatal("error mysql dc")
+	}
+	defer sqlDB.Close()
+
 	// Get auth token from environment variables
 	token := os.Getenv("AUTH_TOKEN")
 	if token == "" {
@@ -45,6 +62,9 @@ func main() {
 		log.Fatal("Error opening file:", err)
 	}
 	defer file.Close()
+
+	// Create collection storage
+	var finalStatsColl []models.FinalStats
 
 	scanner := bufio.NewScanner(file)
 
@@ -61,8 +81,15 @@ func main() {
 		// Initialize FinalStats variable
 		finalStats := StrucutreData(responseData)
 
-		UploadData(os.Getenv("MONGO_CONN"), finalStats)
+		// Add data to slice
+		finalStatsColl = append(finalStatsColl, finalStats)
+		// Queue maker
+		time.Sleep(200 * time.Millisecond)
 	}
+
+	// Insert data into database
+	res := db.Create(finalStatsColl)
+	log.Println("Inserted rows: ", res.RowsAffected)
 }
 
 func FortniteApi(method string, playerName string, token string) (models.Response, error) {
@@ -182,38 +209,4 @@ func StrucutreData(responseData models.Response) models.FinalStats {
 	finalStats.SquadLastModified = responseData.Data.Stats.All.Squad.LastModified
 
 	return finalStats
-}
-
-func UploadData(connectionString string, finalStats models.FinalStats) error {
-	// Set up MongoDB connection options.
-	clientOptions := options.Client().ApplyURI(connectionString)
-
-	// Connect to MongoDB.
-	mongoClient, err := mongo.Connect(context.Background(), clientOptions)
-	if err != nil {
-		return err
-	}
-
-	defer func() {
-		if err := mongoClient.Disconnect(context.Background()); err != nil {
-			log.Println(err)
-		}
-	}()
-
-	// Check the connection.
-	err = mongoClient.Ping(context.Background(), nil)
-	if err != nil {
-		return err
-	}
-
-	// Access a MongoDB collection.
-	collection := mongoClient.Database("FortniteStats").Collection("Players")
-	insertResult, err := collection.InsertOne(context.Background(), finalStats)
-	if err != nil {
-		return err
-	}
-
-	log.Println("Inserted", insertResult.InsertedID)
-
-	return err
 }

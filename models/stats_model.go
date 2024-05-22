@@ -44,64 +44,64 @@ type ModeInfo struct {
 }
 
 type FinalStats struct {
-	ID                  string    `json:"id" bson:"id"`
-	Name                string    `json:"name" bson:"name"`
-	OverallWins         int       `json:"overallWins" bson:"overallWins"`
-	OverallTop3         int       `json:"overallTop3" bson:"overallTop3"`
-	OverallTop5         int       `json:"overallTop5" bson:"overallTop5"`
-	OverallTop6         int       `json:"overallTop6" bson:"overallTop6"`
-	OverallTop10        int       `json:"overallTop10" bson:"overallTop10"`
-	OverallTop12        int       `json:"overallTop12" bson:"overallTop12"`
-	OverallTop25        int       `json:"overallTop25" bson:"overallTop25"`
-	OverallKills        int       `json:"overallKills" bson:"overallKills"`
-	OverallMatches      int       `json:"overallMatches" bson:"overallMatches"`
-	OverallLastModified time.Time `json:"overallLastModified" bson:"overallLastModified"`
+	ID                  string    `gorm:"primaryKey" json:"id"`
+	Name                string    `json:"name"`
+	OverallWins         int       `json:"overallWins"`
+	OverallTop3         int       `json:"overallTop3"`
+	OverallTop5         int       `json:"overallTop5"`
+	OverallTop6         int       `json:"overallTop6"`
+	OverallTop10        int       `json:"overallTop10"`
+	OverallTop12        int       `json:"overallTop12"`
+	OverallTop25        int       `json:"overallTop25"`
+	OverallKills        int       `json:"overallKills"`
+	OverallMatches      int       `json:"overallMatches"`
+	OverallLastModified time.Time `gorm:"default:'2000-01-01 00:00:00'" json:"overallLastModified"`
 
 	// Solo stats
-	SoloWins         int       `json:"soloWins" bson:"soloWins"`
-	SoloTop3         int       `json:"soloTop3" bson:"soloTop3"`
-	SoloTop5         int       `json:"soloTop5" bson:"soloTop5"`
-	SoloTop6         int       `json:"soloTop6" bson:"soloTop6"`
-	SoloTop10        int       `json:"soloTop10" bson:"soloTop10"`
-	SoloTop12        int       `json:"soloTop12" bson:"soloTop12"`
-	SoloTop25        int       `json:"soloTop25" bson:"soloTop25"`
-	SoloKills        int       `json:"soloKills" bson:"soloKills"`
-	SoloMatches      int       `json:"soloMatches" bson:"soloMatches"`
-	SoloLastModified time.Time `json:"soloLastModified" bson:"soloLastModified"`
+	SoloWins         int       `json:"soloWins"`
+	SoloTop3         int       `json:"soloTop3"`
+	SoloTop5         int       `json:"soloTop5"`
+	SoloTop6         int       `json:"soloTop6"`
+	SoloTop10        int       `json:"soloTop10"`
+	SoloTop12        int       `json:"soloTop12"`
+	SoloTop25        int       `json:"soloTop25"`
+	SoloKills        int       `json:"soloKills"`
+	SoloMatches      int       `json:"soloMatches"`
+	SoloLastModified time.Time `gorm:"default:'2000-01-01 00:00:00'" json:"soloLastModified"`
 
 	// Duo stats
-	DuoWins         int       `json:"duoWins" bson:"duoWins"`
-	DuoTop3         int       `json:"duoTop3" bson:"duoTop3"`
-	DuoTop5         int       `json:"duoTop5" bson:"duoTop5"`
-	DuoTop6         int       `json:"duoTop6" bson:"duoTop6"`
-	DuoTop10        int       `json:"duoTop10" bson:"duoTop10"`
-	DuoTop12        int       `json:"duoTop12" bson:"duoTop12"`
-	DuoTop25        int       `json:"duoTop25" bson:"duoTop25"`
-	DuoKills        int       `json:"duoKills" bson:"duoKills"`
-	DuoMatches      int       `json:"duoMatches" bson:"duoMatches"`
-	DuoLastModified time.Time `json:"duoLastModified" bson:"duoLastModified"`
+	DuoWins         int       `json:"duoWins"`
+	DuoTop3         int       `json:"duoTop3"`
+	DuoTop5         int       `json:"duoTop5"`
+	DuoTop6         int       `json:"duoTop6"`
+	DuoTop10        int       `json:"duoTop10"`
+	DuoTop12        int       `json:"duoTop12"`
+	DuoTop25        int       `json:"duoTop25"`
+	DuoKills        int       `json:"duoKills"`
+	DuoMatches      int       `json:"duoMatches"`
+	DuoLastModified time.Time `gorm:"default:'2000-01-01 00:00:00'" json:"duoLastModified"`
 
 	// Trio stats
-	TrioWins         int       `json:"trioWins" bson:"trioWins"`
-	TrioTop3         int       `json:"trioTop3" bson:"trioTop3"`
-	TrioTop5         int       `json:"trioTop5" bson:"trioTop5"`
-	TrioTop6         int       `json:"trioTop6" bson:"trioTop6"`
-	TrioTop10        int       `json:"trioTop10" bson:"trioTop10"`
-	TrioTop12        int       `json:"trioTop12" bson:"trioTop12"`
-	TrioTop25        int       `json:"trioTop25" bson:"trioTop25"`
-	TrioKills        int       `json:"trioKills" bson:"trioKills"`
-	TrioMatches      int       `json:"trioMatches" bson:"trioMatches"`
-	TrioLastModified time.Time `json:"trioLastModified" bson:"trioLastModified"`
+	TrioWins         int       `json:"trioWins"`
+	TrioTop3         int       `json:"trioTop3"`
+	TrioTop5         int       `json:"trioTop5"`
+	TrioTop6         int       `json:"trioTop6"`
+	TrioTop10        int       `json:"trioTop10"`
+	TrioTop12        int       `json:"trioTop12"`
+	TrioTop25        int       `json:"trioTop25"`
+	TrioKills        int       `json:"trioKills"`
+	TrioMatches      int       `json:"trioMatches"`
+	TrioLastModified time.Time `gorm:"default:'2000-01-01 00:00:00'" json:"trioLastModified"`
 
 	// Squad stats
-	SquadWins         int       `json:"squadWins" bson:"squadWins"`
-	SquadTop3         int       `json:"squadTop3" bson:"squadTop3"`
-	SquadTop5         int       `json:"squadTop5" bson:"squadTop5"`
-	SquadTop6         int       `json:"squadTop6" bson:"squadTop6"`
-	SquadTop10        int       `json:"squadTop10" bson:"squadTop10"`
-	SquadTop12        int       `json:"squadTop12" bson:"squadTop12"`
-	SquadTop25        int       `json:"squadTop25" bson:"squadTop25"`
-	SquadKills        int       `json:"squadKills" bson:"squadKills"`
-	SquadMatches      int       `json:"squadMatches" bson:"squadMatches"`
-	SquadLastModified time.Time `json:"squadLastModified" bson:"squadLastModified"`
+	SquadWins         int       `json:"squadWins"`
+	SquadTop3         int       `json:"squadTop3"`
+	SquadTop5         int       `json:"squadTop5"`
+	SquadTop6         int       `json:"squadTop6"`
+	SquadTop10        int       `json:"squadTop10"`
+	SquadTop12        int       `json:"squadTop12"`
+	SquadTop25        int       `json:"squadTop25"`
+	SquadKills        int       `json:"squadKills"`
+	SquadMatches      int       `json:"squadMatches"`
+	SquadLastModified time.Time `gorm:"default:'2000-01-01 00:00:00'" json:"squadLastModified"`
 }
