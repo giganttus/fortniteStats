@@ -2,3 +2,4 @@
 *.env
 playerList.txt
 fortniteStats.log
+.vscode/settings.json
